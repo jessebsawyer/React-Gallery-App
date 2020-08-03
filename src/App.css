@@ -75,6 +75,7 @@ input {
 .photo-container ul li {
   width: 220px;
   height: 165px;
+  border-radius: 1.5rem;
   overflow: hidden;
   margin-bottom: 15px;
 }

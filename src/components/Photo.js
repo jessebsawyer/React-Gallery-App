@@ -1,7 +1,9 @@
 import React from 'react';
 
-const Photo = () => (
-    <h1>Hello from photo.</h1>
+const Photo = props => (
+    <li>
+        <img src={props.url} alt=''/>
+    </li>
 )
 
 export default Photo;
