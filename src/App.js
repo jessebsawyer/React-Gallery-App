@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import axios from 'axios';
 import apiKey from './config';
 import Search from './components/SearchForm';
@@ -21,7 +21,7 @@ class App extends Component {
   }
   
   componentDidMount() {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=cats&per_page=24&format=json&nojsoncallback=1`)
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
           photos: response.data.photos.photo,
@@ -46,21 +46,65 @@ class App extends Component {
       })
   }
 
+  showTrees = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          photos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
+  showSun = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=sun&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          photos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
+  showOcean = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=ocean&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          photos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
   render() {
-    console.log(this.state.photos);
     return (
       <BrowserRouter>
         <div className='container'>
           <Search onSearch={this.performSearch}/>
           <Nav />
           <div className='photo-container'>
-            <Route path='/notfound' component={PageNotFound}/>
             {
               (this.state.loading)
               ? <p>Loading</p>
               : <PhotoContainer data={this.state.photos} />   
             }   
           </div>
+          <Switch>
+            <Route exact path='/' > <Redirect to='/trees'></Redirect> </Route>
+            <Route path='/trees' render={this.showTrees} />
+            <Route path='/sun' render={this.showSun} />
+            <Route path='/ocean' render={this.showOcean} />
+            <Route component={PageNotFound}></Route>
+          </Switch>
         </div>
       </BrowserRouter>
     );
