@@ -20,18 +20,18 @@ class App extends Component {
     }
   }
   
-  componentDidMount() {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
-      .then(response => {
-        this.setState({
-          photos: response.data.photos.photo,
-          loading: false
-        });
-      })
-      .catch(err => {
-        console.log('Error fetching and parsing data', err);
-      })
-  }
+  // componentDidMount() {
+  //   axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
+  //     .then(response => {
+  //       this.setState({
+  //         photos: response.data.photos.photo,
+  //         loading: false
+  //       });
+  //     })
+  //     .catch(err => {
+  //       console.log('Error fetching and parsing data', err);
+  //     })
+  // }
 
   performSearch = (query) => {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
@@ -46,46 +46,7 @@ class App extends Component {
       })
   }
 
-  showTrees = () => {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
-      .then(response => {
-        this.setState({
-          photos: response.data.photos.photo,
-          loading: false
-        });
-      })
-      .catch(err => {
-        console.log('Error fetching and parsing data', err);
-      })
-  }
-
-  showSun = () => {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=sun&per_page=24&format=json&nojsoncallback=1`)
-      .then(response => {
-        this.setState({
-          photos: response.data.photos.photo,
-          loading: false
-        });
-      })
-      .catch(err => {
-        console.log('Error fetching and parsing data', err);
-      })
-  }
-
-  showOcean = () => {
-    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=ocean&per_page=24&format=json&nojsoncallback=1`)
-      .then(response => {
-        this.setState({
-          photos: response.data.photos.photo,
-          loading: false
-        });
-      })
-      .catch(err => {
-        console.log('Error fetching and parsing data', err);
-      })
-  }
-
-  render() {
+ render() {
     return (
       <BrowserRouter>
         <div className='container'>
@@ -100,9 +61,9 @@ class App extends Component {
           </div>
           <Switch>
             <Route exact path='/' > <Redirect to='/trees'></Redirect> </Route>
-            <Route path='/trees' render={this.showTrees} />
-            <Route path='/sun' render={this.showSun} />
-            <Route path='/ocean' render={this.showOcean} />
+            <Route path='/trees' render={this.performSearch('trees')} />
+            <Route path='/sun' render={this.performSearch('sun')} />
+            <Route path='/ocean' render={this.performSearch('ocean')} />
             <Route component={PageNotFound}></Route>
           </Switch>
         </div>

@@ -3,7 +3,7 @@ import Photo from './Photo'
 import NoResults from './NoResults'
 
 const PhotoContainer = props => {
-    
+   
     
     const results = props.data;
     let photos;
