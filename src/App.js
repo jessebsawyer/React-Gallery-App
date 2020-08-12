@@ -7,6 +7,8 @@ import Search from './components/SearchForm';
 import Nav from './components/Nav';
 import PhotoContainer from './components/PhotoContainer';
 import PageNotFound from './components/PageNotFound';
+// import NoResults from './components/NoResults';
+
 
 const key = apiKey;
 
@@ -15,29 +17,64 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      photos: [],
+      treePhotos: [],
+      sunPhotos: [],
+      oceanPhotos: [],
+      searchPhotos: [],
       loading: true
     }
   }
   
-  // componentDidMount() {
-  //   axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
-  //     .then(response => {
-  //       this.setState({
-  //         photos: response.data.photos.photo,
-  //         loading: false
-  //       });
-  //     })
-  //     .catch(err => {
-  //       console.log('Error fetching and parsing data', err);
-  //     })
-  // }
+  componentDidMount() {
+    this.showTrees();
+    this.showSun();
+    this.showOcean();
+  }
 
   performSearch = (query) => {
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=${query}&per_page=24&format=json&nojsoncallback=1`)
       .then(response => {
         this.setState({
-          photos: response.data.photos.photo,
+          searchPhotos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
+  showTrees = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=trees&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          treePhotos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
+  showSun = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=sun&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          sunPhotos: response.data.photos.photo,
+          loading: false
+        });
+      })
+      .catch(err => {
+        console.log('Error fetching and parsing data', err);
+      })
+  }
+
+  showOcean = () => {
+    axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${key}&tags=ocean&per_page=24&format=json&nojsoncallback=1`)
+      .then(response => {
+        this.setState({
+          oceanPhotos: response.data.photos.photo,
           loading: false
         });
       })
@@ -53,19 +90,22 @@ class App extends Component {
           <Search onSearch={this.performSearch}/>
           <Nav />
           <div className='photo-container'>
-            {
-              (this.state.loading)
-              ? <p>Loading</p>
-              : <PhotoContainer data={this.state.photos} />   
-            }   
-          </div>
+            {/* {
+              (this.state.searchPhotos < 6)
+              ? <NoResults />
+              : < PhotoContainer data={this.state.searchPhotos} loading={this.state.loading} />
+            } */}
+            
           <Switch>
             <Route exact path='/' > <Redirect to='/trees'></Redirect> </Route>
-            <Route path='/trees' render={this.performSearch('trees')} />
-            <Route path='/sun' render={this.performSearch('sun')} />
-            <Route path='/ocean' render={this.performSearch('ocean')} />
+            <Route path='/trees' render={ () => <PhotoContainer data={this.state.treePhotos} loading={this.state.loading} />} />
+            <Route path='/sun' render={ () => <PhotoContainer data={this.state.sunPhotos} loading={this.state.loading} />} />
+            <Route path='/ocean' render={ () => <PhotoContainer data={this.state.oceanPhotos} loading={this.state.loading} />} />
+            <Route path='/search/:topic' render={ () => <PhotoContainer data={this.state.searchPhotos} loading={this.state.loading}/>} />
             <Route component={PageNotFound}></Route>
           </Switch>
+          </div>
+          
         </div>
       </BrowserRouter>
     );
