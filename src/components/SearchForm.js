@@ -14,7 +14,7 @@ class Search extends Component {
       e.preventDefault();
       this.props.onSearch(this.state.searchText);
       let topic = this.topic;
-      let path = `search/${topic}/`;
+      let path = `search/${topic}`;
       this.props.history.push(path);
       e.currentTarget.reset();
     }
