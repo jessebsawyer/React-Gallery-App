@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Displays Individual API Results
 const Photo = props => (
     <li>
         <img src={props.url} alt=''/>

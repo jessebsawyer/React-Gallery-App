@@ -1,3 +1,4 @@
+// Import Files
 import React, { Component } from 'react';
 import './App.css';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
@@ -7,11 +8,12 @@ import Search from './components/SearchForm';
 import Nav from './components/Nav';
 import PhotoContainer from './components/PhotoContainer';
 import PageNotFound from './components/PageNotFound';
-// import NoResults from './components/NoResults';
 
 
+// API Key 
 const key = apiKey;
 
+// App Component Calls Fetches API's and Renders Main Components
 class App extends Component {
 
   constructor() {
@@ -90,18 +92,12 @@ class App extends Component {
           <Search onSearch={this.performSearch}/>
           <Nav />
           <div className='photo-container'>
-            {/* {
-              (this.state.searchPhotos < 6)
-              ? <NoResults />
-              : < PhotoContainer data={this.state.searchPhotos} loading={this.state.loading} />
-            } */}
-            
           <Switch>
             <Route exact path='/' > <Redirect to='/trees'></Redirect> </Route>
             <Route path='/trees' render={ () => <PhotoContainer data={this.state.treePhotos} loading={this.state.loading} />} />
             <Route path='/sun' render={ () => <PhotoContainer data={this.state.sunPhotos} loading={this.state.loading} />} />
             <Route path='/ocean' render={ () => <PhotoContainer data={this.state.oceanPhotos} loading={this.state.loading} />} />
-            <Route path='/search/:topic' render={ () => <PhotoContainer data={this.state.searchPhotos} loading={this.state.loading}/>} />
+            <Route path='/search/:topic' render={ () => <PhotoContainer data={this.state.searchPhotos} loading={this.state.loading} />} />
             <Route component={PageNotFound}></Route>
           </Switch>
           </div>

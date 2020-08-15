@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
 
+// Displays Functioning Search Bar That Returns API Results Based On User Input
 class Search extends Component {
     
     state = {
@@ -12,9 +14,9 @@ class Search extends Component {
   
     handleSubmit = e => {
       e.preventDefault();
+      this.props.history.replace('/search');
       this.props.onSearch(this.state.searchText);
-      let topic = this.topic;
-      let path = `search/${topic}`;
+      let path = `search/${this.state.searchText}`;
       this.props.history.push(path);
       e.currentTarget.reset();
     }
@@ -24,7 +26,6 @@ class Search extends Component {
         <form className="search-form" onSubmit={this.handleSubmit}>
           <input 
           type="search" 
-          ref={ (input) => this.topic = input}
           name="search"
           onChange={this.onSearchChange} 
           placeholder="Search" required/>
@@ -39,4 +40,4 @@ class Search extends Component {
     }
 }
 
-export default Search;
+export default withRouter(Search);
